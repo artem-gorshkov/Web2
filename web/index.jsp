@@ -1,6 +1,4 @@
 <%@ page import="java.util.UUID" %>
-<%@ page import="app.models.Point" %>
-<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <html lang="ru">
 <head>
@@ -10,7 +8,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-    <%@ include file="incl/header.jsp"%>
+<table>
+    <%@ include file="incl/header.jsp" %>
     <tr>
         <td>
             <form method="GET" action="${pageContext.request.contextPath}/app" onsubmit="return valid()">
@@ -77,34 +76,7 @@
             </form>
         </td>
     </tr>
-    <tr>
-        <td>
-            <table class="answer">
-                <% try {
-                    if (!data.isEmpty()) { %>
-                <tr>
-                    <th>X</th>
-                    <th class="word-break">Y</th>
-                    <th>R</th>
-                    <th>Результат</th>
-                </tr>
-                <% for (Point point : data) {%>
-                <tr>
-                    <td><%=point.getX()%>
-                    </td>
-                    <td><%=point.getY()%>
-                    </td>
-                    <td><%=point.getR()%>
-                    </td>
-                    <td><%=point.getResult()%>
-                    </td>
-                </tr>
-                <% }
-                }
-                } catch (Throwable e) {e.printStackTrace();} %>
-            </table>
-        </td>
-    </tr>
+    <%@ include file="incl/table.jsp"%>
     <tr>
         <td id="stand_deviation"></td>
     </tr>

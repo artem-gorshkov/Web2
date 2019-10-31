@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class AreaCheckServlet extends HttpServlet {
     public static final String wrongFormat = "Данные представлены не в числовом формате";
@@ -26,10 +27,7 @@ public class AreaCheckServlet extends HttpServlet {
         } else {
             point = new Point(x, y, r, wrongFormat, unique);
         }
-        if (req.getSession().getAttribute("data") == null) {
-            req.getSession().setAttribute("data", new ArrayList<Point>());
-        }
-        ArrayList<Point> data = (ArrayList<Point>) req.getSession().getAttribute("data");
+        List<Point> data = (ArrayList<Point>) req.getSession().getAttribute("data");
         try {
             Point last = data.get(data.size() - 1);
             if (!last.equals(point)) //add if not reload page
