@@ -1,3 +1,4 @@
+"use strict"
 let er = document.getElementById("error");
 let textField = document.getElementById("textfieldY");
 let Xfield = document.getElementsByName("X");

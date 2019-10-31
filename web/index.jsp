@@ -13,12 +13,6 @@
     <%@ include file="incl/header.jsp"%>
     <tr>
         <td>
-            <img src="${pageContext.request.contextPath}/img/plot.png" alt="график">
-            <!-- to do interactive canvas-->
-        </td>
-    </tr>
-    <tr>
-        <td>
             <form method="GET" action="${pageContext.request.contextPath}/app" onsubmit="return valid()">
                 <input type="hidden" name="unique" value="<%= UUID.randomUUID().toString()%>">
                 <table class="form">
@@ -87,13 +81,12 @@
         <td>
             <table class="answer">
                 <% try {
-                    ArrayList<Point> data = (ArrayList<Point>) request.getSession().getAttribute("data");
                     if (!data.isEmpty()) { %>
                 <tr>
-                    <td>X</td>
-                    <td class="word-break">Y</td>
-                    <td>R</td>
-                    <td>Результат</td>
+                    <th>X</th>
+                    <th class="word-break">Y</th>
+                    <th>R</th>
+                    <th>Результат</th>
                 </tr>
                 <% for (Point point : data) {%>
                 <tr>

@@ -1,3 +1,4 @@
+"use strict"
 let script_time = [];
 
 Array.prototype.forEach.call(document.getElementsByClassName("script_time"), el => {

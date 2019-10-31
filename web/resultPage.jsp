@@ -12,11 +12,6 @@
     <%@ include file="incl/header.jsp" %>
     <tr>
         <td>
-            <img src="${pageContext.request.contextPath}/img/plot.png" alt="график">
-        </td>
-    </tr>
-    <tr>
-        <td>
             <table class="answer">
                 <% try {
                     ArrayList<Point> data = (ArrayList<Point>) request.getSession().getAttribute("data");

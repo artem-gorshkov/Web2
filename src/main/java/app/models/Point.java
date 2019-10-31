@@ -9,14 +9,6 @@ public class Point {
     private String result;
     private String unique;
 
-    public String getUnique() {
-        return unique;
-    }
-
-    public void setUnique(String unique) {
-        this.unique = unique;
-    }
-
     public Point(String x, String y, String r) {
         this.x = x;
         this.y = y;
@@ -83,4 +75,11 @@ public class Point {
         this.result = result;
     }
 
+    public String getUnique() {
+        return unique;
+    }
+
+    public void setUnique(String unique) {
+        this.unique = unique;
+    }
 }

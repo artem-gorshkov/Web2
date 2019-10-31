@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <link rel="icon" href="img/favicon.ico">
 <table id="mainTable">
     <tr>
@@ -9,5 +11,43 @@
                 <h3>Выполнил: Горшков Артем Владимирович</h3>
                 <h4>Группа: P3211</h4>
             </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <canvas id="canvas" width="512" height="512" style=" margin: 1% 0;
+                    background: url('${pageContext.request.contextPath}/img/Plot.png') no-repeat; background-size: 100%">
+                сломалось
+            </canvas>
+            <script type="text/javascript">
+                const data = [
+
+<%--                    <% ArrayList<Point> data = (ArrayList<Point>) request.getSession().getAttribute("data");--%>
+<%--                    if (!data.isEmpty()) {--%>
+<%--                        for(Point point : data) {%>--%>
+<%--                    {<%= point.getX() + ',' + point.getY() + ','  + point.getR()%>},--%>
+<%--                        <%};--%>
+<%--                    }%>];--%>
+                const canvas = document.getElementById("canvas");
+                const width = canvas.getAttribute("width");
+                const height = canvas.getAttribute("height");
+                const ctx = canvas.getContext("2d");
+                canvas_arrow(ctx, 0, height/2, width, height/2);
+                canvas_arrow(ctx, width/2, height, width/2, 0);
+
+                function canvas_arrow(context, fromx, fromy, tox, toy) {
+                    var headlen = 10; // length of head in pixels
+                    var dx = tox - fromx;
+                    var dy = toy - fromy;
+                    var angle = Math.atan2(dy, dx);
+                    context.moveTo(fromx, fromy);
+                    context.lineTo(tox, toy);
+                    context.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+                    context.moveTo(tox, toy);
+                    context.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+                }
+            </script>
+            <!-- to do interactive canvas-->
+            <!-- jstl! -->
         </td>
     </tr>
