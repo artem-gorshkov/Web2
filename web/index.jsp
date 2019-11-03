@@ -76,11 +76,29 @@
             </form>
         </td>
     </tr>
-    <%@ include file="incl/table.jsp"%>
+    <%@ include file="incl/table.jsp" %>
     <tr>
         <td id="stand_deviation"></td>
     </tr>
 </table>
 <script src="${pageContext.request.contextPath}/javascript/validation.js"></script>
+<script type="text/javascript">
+    let form = document.forms[0];
+    let Relems = form.elements.R;
+    Array.prototype.forEach.call(Relems, function (elem) {
+       elem.oninput = function (event) {
+           console.log(event);
+           let newR = event.currentTarget.value;
+           paintPlot();
+           console.log(newR);
+           addDots(newR, data);
+       }
+    });
+    canvas.onclick = function (event) {
+        const x = event.pageX;
+        const y = event.pageY;
+
+    };
+</script>
 </body>
 </html>
