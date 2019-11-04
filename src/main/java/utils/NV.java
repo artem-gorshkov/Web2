@@ -38,8 +38,10 @@ public class NV {
         }
         return false;
     }
-
     public static boolean isValidNumbers(String x, String y, String r) {
         return isXIntegerOrHalf(x) && isDouble(y) && isRInRange(r);
+    }
+    public static boolean isValidNumbersFromCanvas(String x, String y, String r) {
+        return isDouble(x) && isDouble(y) && isRInRange(r);
     }
 }
