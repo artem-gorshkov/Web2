@@ -6,7 +6,6 @@ body {
 
 table {
     width: 100%;
-    margin-top: 1.5%;
     text-align: center;
     font-family: monospace;
     font-size: 14pt;
@@ -15,6 +14,10 @@ table {
 img {
     vertical-align: top;
     margin: 10px 0 0 0;
+}
+
+.form {
+    margin-top: 1%;
 }
 
 .form p {
@@ -79,4 +82,12 @@ img {
 
 [type="submit"] {
     margin-top: 1%;
+}
+
+.button {
+    background-color: transparent; color: black;
+}
+
+.active {
+    color: #45688E;
 }

@@ -6,36 +6,33 @@
     <title>Lab2</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <script src="${pageContext.request.contextPath}/javascript/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 <table>
     <%@ include file="incl/header.jsp" %>
     <tr>
         <td>
+            <div id="checkedR"><br><br></div>
+        </td>
+    </tr>
+    <tr>
+        <td>
             <form method="GET" action="${pageContext.request.contextPath}/app" onsubmit="return valid()">
-                <input type="hidden" name="unique" value="<%= UUID.randomUUID().toString()%>">
+                <input type="hidden" name="X" id="X">
                 <table class="form">
                     <tr>
                         <td>
                             <p>Значение X:
-                                <input type="radio" name="X" value="-2" id="X0">
-                                <label for="X0">-2</label>
-                                <input type="radio" name="X" value="-1.5" id="X1">
-                                <label for="X1">-1.5</label>
-                                <input type="radio" name="X" value="-1" id="X2">
-                                <label for="X2">-1</label>
-                                <input type="radio" name="X" value="-0.5" id="X3">
-                                <label for="X3">-0.5</label>
-                                <input type="radio" name="X" value="0" id="X4">
-                                <label for="X4">0</label>
-                                <input type="radio" name="X" value="0.5" id="X5">
-                                <label for="X5">0.5</label>
-                                <input type="radio" name="X" value="1" id="X6">
-                                <label for="X6">1</label>
-                                <input type="radio" name="X" value="1.5" id="X7">
-                                <label for="X7">1.5</label>
-                                <input type="radio" name="X" value="2" id="X8">
-                                <label for="X8">2</label>
+                                <input class="button" type="button" name="Xbutt" value="-2" id="X0">
+                                <input class="button" type="button" name="Xbutt" value="-1.5" id="X1">
+                                <input class="button" type="button" name="Xbutt" value="-1" id="X2">
+                                <input class="button" type="button" name="Xbutt" value="-0.5" id="X3">
+                                <input class="button" type="button" name="Xbutt" value="0" id="X4">
+                                <input class="button" type="button" name="Xbutt" value="0.5" id="X5">
+                                <input class="button" type="button" name="Xbutt" value="1" id="X6">
+                                <input class="button" type="button" name="Xbutt" value="1.5" id="X7">
+                                <input class="button" type="button" name="Xbutt" value="2" id="X8">
                             </p>
                         </td>
                     </tr>
@@ -51,15 +48,15 @@
                         <td>
                             <p>
                                 Значение R:
-                                <input type="radio" name="R" value="1" id="R0">
+                                <input type="radio" class="R" name="R" value="1" id="R0">
                                 <label for="R0">1</label>
-                                <input type="radio" name="R" value="2" id="R1">
+                                <input type="radio" class="R" name="R" value="2" id="R1">
                                 <label for="R1">2</label>
-                                <input type="radio" name="R" value="3" id="R2">
+                                <input type="radio" class="R" name="R" value="3" id="R2">
                                 <label for="R2">3</label>
-                                <input type="radio" name="R" value="4" id="R3">
+                                <input type="radio" class="R" name="R" value="4" id="R3">
                                 <label for="R3">4</label>
-                                <input type="radio" name="R" value="5" id="R4">
+                                <input type="radio" class="R" name="R" value="5" id="R4">
                                 <label for="R4">5</label>
                             </p>
                         </td>
@@ -73,32 +70,64 @@
                         </td>
                     </tr>
                 </table>
+                <input type="hidden" name="isFromCanvas" value="0">
+                <input type="hidden" name="unique" value="<%= UUID.randomUUID().toString()%>">
             </form>
         </td>
     </tr>
     <%@ include file="incl/table.jsp" %>
-    <tr>
-        <td id="stand_deviation"></td>
-    </tr>
 </table>
 <script src="${pageContext.request.contextPath}/javascript/validation.js"></script>
 <script type="text/javascript">
+    const errorText = "Невозможно определить координаты точки!<br>Укажите R!";
     let form = document.forms[0];
-    let Relems = form.elements.R;
-    Array.prototype.forEach.call(Relems, function (elem) {
-       elem.oninput = function (event) {
-           console.log(event);
-           let newR = event.currentTarget.value;
-           paintPlot();
-           console.log(newR);
-           addDots(newR, data);
-       }
+    window.onload = function () {
+        form.reset(); //drop R on new page
+    };
+    Array.prototype.forEach.call(form.elements.R, function (elem) {
+        elem.oninput = function (event) {
+            document.getElementById("checkedR").innerHTML = "<br><br>";
+            paintPlot();
+            addDots(event.currentTarget.value, data); //repaint dots with new radius
+        }
     });
     canvas.onclick = function (event) {
-        const x = event.pageX;
-        const y = event.pageY;
+        let R = null;
 
+        Array.prototype.forEach.call(form.elements.R, function (elem) {
+            if (elem.checked === true) {
+                R = elem;
+            }
+        });
+        if (R == null) {
+            document.getElementById("checkedR").innerHTML = errorText; //click with not choosen R
+        } else {
+            const x = event.pageX - (canvas.getBoundingClientRect().left + pageXOffset);
+            const y = event.pageY - (canvas.getBoundingClientRect().top + pageYOffset);
+
+
+            const cordX = (x - width / 2) * Number(R.value) / Math.round(width / 3);
+            const cordY = (height / 2 - y) * Number(R.value) / Math.round(height / 3);
+
+            //draw point
+            setColor({'x':cordX,'y':cordY}, Number(R.value));
+            ctx.beginPath();
+            ctx.arc(x, y, 3, 0 * Math.PI, 2 * Math.PI);
+            ctx.fill();
+
+            //send request
+            form.elements.X.value = cordX;
+            console.log(cordX);
+            form.elements.Y.value = cordY;
+            form.elements.isFromCanvas.value = 1;
+            form.submit();
+        }
     };
+    $(".button").click(function () {
+        $(".button").removeClass("active");
+        $(this).addClass("active");
+        $("#X").val($(this).val());
+    });
 </script>
 </body>
 </html>

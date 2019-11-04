@@ -9,15 +9,18 @@
 <body>
 <link rel="icon" href="img/favicon.ico">
 <table id="mainTable">
-<%@ include file="incl/header.jsp" %>
-<%@ include file="incl/table.jsp"%>
-<tr>
-    <td>
-        <form method="GET" action="${pageContext.request.contextPath}/app">
-            <button type="submit">Вернуться на стартовую страницу</button>
-        </form>
-    </td>
-</tr>
+    <%@ include file="incl/header.jsp" %>
+    <%@ include file="incl/table.jsp" %>
+    <tr>
+        <td>
+            <form method="GET" action="${pageContext.request.contextPath}/app">
+                <button type="submit">Вернуться на стартовую страницу</button>
+            </form>
+        </td>
+    </tr>
 </table>
+<script type="text/javascript">
+    addDots(${pageContext.request.getParameter("R")}, data);
+</script>
 </body>
 </html>

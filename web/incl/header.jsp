@@ -13,90 +13,99 @@
 </tr>
 <tr>
     <td>
-        <canvas id="canvas" width="512" height="512" style=" margin: 1% 0;">
+        <canvas id="canvas" width="500" height="500" style=" margin: 1% 0;">
         </canvas>
         <script type="text/javascript">
             const data = [];
-            let x,y;
+            let x, y;
             <c:forEach var="point" items="${sessionScope.data}"> // add history
-            x = ${point.getX()};
-            y = ${point.getY()};
-            data.push({"x":x, "y":y});
+            x = Number("${point.getX()}");
+            y = Number("${point.getY()}");
+            if (isFinite(x) && isFinite(y)) {
+                data.push({"x": x, "y": y});
+            }
             </c:forEach>
-            //test
-            data.push({"x":-1, "y":1});
-            data.push({"x":1, "y":-1});
-            data.push({"x":2, "y":-3});
-            console.log(data);
             const canvas = document.getElementById("canvas");
             const width = canvas.getAttribute("width");
             const height = canvas.getAttribute("height");
-            let rad = height/40;
-            let rad2 = height/80;
+            let rad = height / 40;
+            let rad2 = height / 80;
             const ctx = canvas.getContext("2d");
             paintPlot(); // draw Axes with marks
-            const {top: canvTop, left: canvLeft} = getCoords(canvas);
-            console.log(canvTop);
-            console.log(canvLeft);
-            const center = {
-                "x": Number(canvLeft) + width/2,
-                "y": Number(canvTop) + height/2
-            };
-            console.log(center);
-            addDots(1, data);
 
             function addDots(R, data) {
-                ctx.fillStyle = "red";
                 Array.prototype.forEach.call(data, function (point) {
-                    console.log(point);
-                    let x = width/2 + point['x']/Number(R)*width/3;
-                    let y = height/2 + point['y']/Number(R)*height/3;
-                    console.log(x);
-                    console.log(y);
-                    ctx.fillRect(x-2, y-2, 5, 5);
+                    setColor(point, R);
+                    let x = width / 2 + point['x'] * Math.round(width / 3) / Number(R);
+                    let y = height / 2 - point['y'] * Math.round(height / 3) / Number(R);
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3, 0 * Math.PI, 2 * Math.PI);
+                    ctx.fill();
                 });
             }
-            function addDot(R, x, y) {
-                let x1 = width/2 + x/Number(R)*width/3;
-                let y1 = height/2 + y/Number(R)*height/3;
-                ctx.fillRect(x-2, y-2, 5, 5);
+
+            function setColor(point, r) {
+                const x = point['x'];
+                const y = point['y'];
+                if (x < 0) {
+                    ctx.fillStyle = "#45688E";
+                } else {
+                    if (y > 0) {
+                        if (x < Number(r) / 2 && y < Number(r)) {
+                            ctx.fillStyle = "red";
+                        } else {
+                            ctx.fillStyle = "#45688E";
+                        }
+                    } else {
+                        if (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(Number(r), 2)) {
+                            ctx.fillStyle = "red";
+                        } else {
+                            ctx.fillStyle = "#45688E";
+                        }
+                    }
+                }
             }
-            function getCoords(elem) {
-                let box = elem.getBoundingClientRect();
-                return {
-                    top: box.top + pageYOffset,
-                    left: box.left + pageXOffset
-                };
-            }
+
             function paintPlot() {
                 ctx.fillStyle = "white";
                 ctx.fillRect(0, 0, Number(width), Number(height)); //do white canvas
+                ctx.fillStyle = "#45688E";
+                ctx.fillRect(width / 2, height / 2, 1 / 6 * width, -2 / 6 * height);
+                ctx.beginPath();
+                ctx.arc(height / 2, width / 2, 2 / 6 * height, 0, Math.PI / 2);
+                ctx.moveTo(width / 2, height / 2);
+                ctx.lineTo(5 / 6 * width, height / 2);
+                ctx.lineTo(width / 2, 5 / 6 * height);
+                ctx.lineTo(width / 2, height / 2);
+                ctx.fill();
                 ctx.beginPath();
                 canvas_arrow(ctx, width / 2, height - rad, width / 2, rad);
                 canvas_arrow(ctx, rad, height / 2, width - rad, height / 2);
-                ctx.strokeText("X", Number(width) - rad, height / 2 - rad/2);
-                ctx.strokeText("Y", width / 2 + rad/2, rad);
-                addMark("-R", width / 2, 5/6 * height);
-                addMark("-R/2", width / 2, 4/6 * height);
-                addMark("R/2", width / 2, 2/6 * height);
-                addMark("R", width / 2, 1/6 * height);
-                addMark("R/2", 4/6 * width, height/2);
-                addMark("R", 5/6 * width, height/2);
-                addMark("-R/2", 2/6 * width, height/2);
-                addMark("-R", 1/6 * width, height/2);
+                ctx.strokeText("X", Number(width) - rad, height / 2 - rad / 2);
+                ctx.strokeText("Y", width / 2 + rad / 2, rad);
+                addMark("-R", width / 2, 5 / 6 * height);
+                addMark("-R/2", width / 2, 4 / 6 * height);
+                addMark("R/2", width / 2, 2 / 6 * height);
+                addMark("R", width / 2, 1 / 6 * height);
+                addMark("R/2", 4 / 6 * width, height / 2);
+                addMark("R", 5 / 6 * width, height / 2);
+                addMark("-R/2", 2 / 6 * width, height / 2);
+                addMark("-R", 1 / 6 * width, height / 2);
                 ctx.stroke();
+
                 function addMark(label, x, y) {
-                    if(x === width / 2) {
-                        ctx.moveTo(x - rad2 ,y);
-                        ctx.lineTo(x + rad2 ,y);
-                        ctx.strokeText(label, x + rad ,y);
+                    if (x === width / 2) {
+                        ctx.moveTo(x - rad2, y);
+                        ctx.lineTo(x + rad2, y);
+                        ctx.strokeText(label, x + rad, y);
                     }
-                    if (y === height/2) {
+                    if (y === height / 2) {
                         ctx.moveTo(x, y - rad2);
                         ctx.lineTo(x, y + rad2);
                         ctx.strokeText(label, x, y - rad);
                     }
                 }
+
                 function canvas_arrow(context, fromx, fromy, tox, toy) {
                     let headlen = 10; // length of head in pixels
                     let dx = tox - fromx;
