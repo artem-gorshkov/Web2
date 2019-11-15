@@ -1,11 +1,12 @@
 <script src="${pageContext.request.contextPath}/javascript/jquery-3.4.1.min.js"></script>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%--<jsp:useBean id="DataBean" scope="session" class="utils.HistoryBean" />--%>
 <tr>
     <td>
         <div class="Header bold">
             <h1>Лабораторная работа №2 по <span class="Pip"> Веб-программированию</span></h1>
-            <h2>Вариант №211006</h2>
+            <h2>Вариант №УКАЖИВАРИАНТ</h2>
             <h3>Выполнил: Горшков Артем Владимирович</h3>
             <h4>Группа: P3211</h4>
         </div>
@@ -19,6 +20,7 @@
             const data = [];
             let x, y;
             <c:forEach var="point" items="${sessionScope.data}"> // add history
+<%--            <c:forEach var="point" items="${DataBean.data}"> // add history--%>
             x = Number("${point.getX()}");
             y = Number("${point.getY()}");
             if (isFinite(x) && isFinite(y)) {

@@ -13,7 +13,7 @@
     <%@ include file="incl/table.jsp" %>
     <tr>
         <td>
-            <form method="GET" action="${pageContext.request.contextPath}/app">
+            <form method="GET" action="${pageContext.request.contextPath}/controller">
                 <button type="submit">Вернуться на стартовую страницу</button>
             </form>
         </td>

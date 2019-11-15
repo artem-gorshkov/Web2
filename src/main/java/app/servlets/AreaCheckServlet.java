@@ -8,6 +8,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.NoSuchElementException;
 
 public class AreaCheckServlet extends HttpServlet {
@@ -53,7 +54,9 @@ public class AreaCheckServlet extends HttpServlet {
         }
 
 
-        ArrayDeque<Point> data = (ArrayDeque<Point>) req.getSession().getAttribute("data");
+        Deque<Point> data = (Deque<Point>) req.getSession().getAttribute("data");
+//        Deque<Point> data = (Deque<Point>) getServletContext().getAttribute("data");
+//        Deque<Point> data = (Deque<Point>) req.getSession().getAttribute("data").getData();
         try {
             Point last = data.getFirst();
             if (!last.equals(point)) //add if not reload page

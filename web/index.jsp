@@ -18,7 +18,7 @@
     </tr>
     <tr>
         <td>
-            <form method="GET" action="${pageContext.request.contextPath}/app" onsubmit="return valid()">
+            <form method="GET" action="${pageContext.request.contextPath}/controller" onsubmit="return valid()">
                 <input type="hidden" name="X" id="X">
                 <table class="form">
                     <tr>
@@ -81,16 +81,21 @@
 <script type="text/javascript">
     const errorText = "Невозможно определить координаты точки!<br>Укажите R!";
     let form = document.forms[0];
+
     window.onload = function () {
         form.reset(); //drop R on new page
     };
+
     Array.prototype.forEach.call(form.elements.R, function (elem) {
-        elem.oninput = function (event) {
+        //elem.oninput doesn't work on helios. Strange! 
+        elem.onclick = function (event) {
+            console.log("here");
             document.getElementById("checkedR").innerHTML = "<br><br>";
             paintPlot();
             addDots(event.currentTarget.value, data); //repaint dots with new radius
         }
     });
+
     canvas.onclick = function (event) {
         let R = null;
 
@@ -110,7 +115,7 @@
             const cordY = (height / 2 - y) * Number(R.value) / Math.round(height / 3);
 
             //draw point
-            setColor({'x':cordX,'y':cordY}, Number(R.value));
+            setColor({'x': cordX, 'y': cordY}, Number(R.value));
             ctx.beginPath();
             ctx.arc(x, y, 3, 0 * Math.PI, 2 * Math.PI);
             ctx.fill();
@@ -123,6 +128,7 @@
             form.submit();
         }
     };
+
     $(".button").click(function () {
         $(".button").removeClass("active");
         $(this).addClass("active");
