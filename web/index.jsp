@@ -6,7 +6,6 @@
     <title>Lab2</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/reset.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
-    <script src="${pageContext.request.contextPath}/javascript/jquery-3.4.1.min.js"></script>
 </head>
 <body>
 <table>
@@ -18,21 +17,30 @@
     </tr>
     <tr>
         <td>
-            <form method="GET" action="${pageContext.request.contextPath}/controller" onsubmit="return valid()">
-                <input type="hidden" name="X" id="X">
+            <form method="POST" action="${pageContext.request.contextPath}/controller" onsubmit="return valid()">
+                <input type="hidden" name="X" id="CanvasX">
                 <table class="form">
                     <tr>
                         <td>
                             <p>Значение X:
-                                <input class="button" type="button" name="Xbutt" value="-2" id="X0">
-                                <input class="button" type="button" name="Xbutt" value="-1.5" id="X1">
-                                <input class="button" type="button" name="Xbutt" value="-1" id="X2">
-                                <input class="button" type="button" name="Xbutt" value="-0.5" id="X3">
-                                <input class="button" type="button" name="Xbutt" value="0" id="X4">
-                                <input class="button" type="button" name="Xbutt" value="0.5" id="X5">
-                                <input class="button" type="button" name="Xbutt" value="1" id="X6">
-                                <input class="button" type="button" name="Xbutt" value="1.5" id="X7">
-                                <input class="button" type="button" name="Xbutt" value="2" id="X8">
+                                <input type="radio" name="X" value="-2" id="X0">
+                                <label for="X0">-2</label>
+                                <input type="radio" name="X" value="-1.5" id="X1">
+                                <label for="X1">-1.5</label>
+                                <input type="radio" name="X" value="-1" id="X2">
+                                <label for="X2">-1</label>
+                                <input type="radio" name="X" value="-0.5" id="X3">
+                                <label for="X3">-0.5</label>
+                                <input type="radio" name="X" value="0" id="X4">
+                                <label for="X4">0</label>
+                                <input type="radio" name="X" value="0.5" id="X5">
+                                <label for="X5">0.5</label>
+                                <input type="radio" name="X" value="1" id="X6">
+                                <label for="X6">1</label>
+                                <input type="radio" name="X" value="1.5" id="X7">
+                                <label for="X7">1.5</label>
+                                <input type="radio" name="X" value="2" id="X8">
+                                <label for="X8">2</label>
                             </p>
                         </td>
                     </tr>
@@ -89,7 +97,6 @@
     Array.prototype.forEach.call(form.elements.R, function (elem) {
         //elem.oninput doesn't work on helios. Strange! 
         elem.onclick = function (event) {
-            console.log("here");
             document.getElementById("checkedR").innerHTML = "<br><br>";
             paintPlot();
             addDots(event.currentTarget.value, data); //repaint dots with new radius
@@ -117,23 +124,16 @@
             //draw point
             setColor({'x': cordX, 'y': cordY}, Number(R.value));
             ctx.beginPath();
-            ctx.arc(x, y, 3, 0 * Math.PI, 2 * Math.PI);
+            ctx.arc(x, y, 3, 0, 2 * Math.PI);
             ctx.fill();
 
             //send request
-            form.elements.X.value = cordX;
-            console.log(cordX);
+            form.elements.X.value = cordY;
             form.elements.Y.value = cordY;
             form.elements.isFromCanvas.value = 1;
             form.submit();
         }
     };
-
-    $(".button").click(function () {
-        $(".button").removeClass("active");
-        $(this).addClass("active");
-        $("#X").val($(this).val());
-    });
 </script>
 </body>
 </html>

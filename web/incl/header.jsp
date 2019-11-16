@@ -1,12 +1,12 @@
 <script src="${pageContext.request.contextPath}/javascript/jquery-3.4.1.min.js"></script>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%--<jsp:useBean id="DataBean" scope="session" class="utils.HistoryBean" />--%>
+<jsp:useBean id="DataBean" scope="session" class="utils.DataBean" />
 <tr>
     <td>
         <div class="Header bold">
             <h1>Лабораторная работа №2 по <span class="Pip"> Веб-программированию</span></h1>
-            <h2>Вариант №УКАЖИВАРИАНТ</h2>
+            <h2>Вариант №87586</h2>
             <h3>Выполнил: Горшков Артем Владимирович</h3>
             <h4>Группа: P3211</h4>
         </div>
@@ -17,10 +17,11 @@
         <canvas id="canvas" width="500" height="500" style=" margin: 1% 0;">
         </canvas>
         <script type="text/javascript">
+            const blue = "#45688E";
+            const red = "red";
             const data = [];
             let x, y;
-            <c:forEach var="point" items="${sessionScope.data}"> // add history
-<%--            <c:forEach var="point" items="${DataBean.data}"> // add history--%>
+            <c:forEach var="point" items="${DataBean.data}"> // add history
             x = Number("${point.getX()}");
             y = Number("${point.getY()}");
             if (isFinite(x) && isFinite(y)) {
@@ -41,7 +42,7 @@
                     let x = width / 2 + point['x'] * Math.round(width / 3) / Number(R);
                     let y = height / 2 - point['y'] * Math.round(height / 3) / Number(R);
                     ctx.beginPath();
-                    ctx.arc(x, y, 3, 0 * Math.PI, 2 * Math.PI);
+                    ctx.arc(x, y, 3, 0, 2 * Math.PI);
                     ctx.fill();
                 });
             }
@@ -50,19 +51,27 @@
                 const x = point['x'];
                 const y = point['y'];
                 if (x < 0) {
-                    ctx.fillStyle = "#45688E";
-                } else {
-                    if (y > 0) {
-                        if (x < Number(r) / 2 && y < Number(r)) {
-                            ctx.fillStyle = "red";
+                    if (y >= 0) {
+                        if (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(r, 2)) {
+                            ctx.fillStyle = red;
                         } else {
-                            ctx.fillStyle = "#45688E";
+                            ctx.fillStyle = blue;
                         }
                     } else {
-                        if (Math.pow(x, 2) + Math.pow(y, 2) <= Math.pow(Number(r), 2)) {
-                            ctx.fillStyle = "red";
+                        if (x < r  && y < r) {
+                            ctx.fillStyle = red;
                         } else {
-                            ctx.fillStyle = "#45688E";
+                            ctx.fillStyle = blue;
+                        }
+                    }
+                } else {
+                    if (y > 0) {
+                        ctx.fillStyle = blue;
+                    } else {
+                        if (r > 2*x - y) {
+                            ctx.fillStyle = red;
+                        } else {
+                            ctx.fillStyle = blue;
                         }
                     }
                 }
@@ -71,15 +80,25 @@
             function paintPlot() {
                 ctx.fillStyle = "white";
                 ctx.fillRect(0, 0, Number(width), Number(height)); //do white canvas
-                ctx.fillStyle = "#45688E";
-                ctx.fillRect(width / 2, height / 2, 1 / 6 * width, -2 / 6 * height);
+
+                ctx.fillStyle = blue;
+                ctx.fillRect(1 / 6 * width, height / 2, 2 / 6 * width, 2 / 6 * height);
+
                 ctx.beginPath();
-                ctx.arc(height / 2, width / 2, 2 / 6 * height, 0, Math.PI / 2);
+                ctx.arc(height / 2, width / 2, 2 / 6 * height, Math.PI, 3/2 *Math.PI);
                 ctx.moveTo(width / 2, height / 2);
-                ctx.lineTo(5 / 6 * width, height / 2);
+                ctx.lineTo(width / 2, 1 / 6 * height);
+                ctx.lineTo( 1/6 * width, height / 2);
+                ctx.lineTo(width / 2, height / 2);
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.moveTo(width / 2, height / 2);
+                ctx.lineTo(4 / 6 * width, height / 2);
                 ctx.lineTo(width / 2, 5 / 6 * height);
                 ctx.lineTo(width / 2, height / 2);
                 ctx.fill();
+
                 ctx.beginPath();
                 canvas_arrow(ctx, width / 2, height - rad, width / 2, rad);
                 canvas_arrow(ctx, rad, height / 2, width - rad, height / 2);

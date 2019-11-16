@@ -1,13 +1,13 @@
 package app.servlets;
 
 import app.models.Point;
+import utils.DataBean;
 import utils.NV;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 import java.io.IOException;
-import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.NoSuchElementException;
 
@@ -16,9 +16,9 @@ public class AreaCheckServlet extends HttpServlet {
     private static final String inZone = "В зоне";
     private static final String outZone = "Не в зоне";
 
-
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
         final String x = req.getParameter("X");
         final String y = req.getParameter("Y");
         final String r = req.getParameter("R");
@@ -32,17 +32,26 @@ public class AreaCheckServlet extends HttpServlet {
             final double X = Double.parseDouble(x);
             final double Y = Double.parseDouble(y);
             final double R = Double.parseDouble(r);
+            //check area
             if (X < 0) {
-                point = new Point(x, y, r, outZone, unique);
-            } else {
-                if (Y > 0) {
-                    if (X < R / 2 && Y < R) {
+                if (Y >= 0) {
+                    if (Math.pow(X, 2) + Math.pow(Y, 2) <= Math.pow(R, 2)) {
                         point = new Point(x, y, r, inZone, unique);
                     } else {
                         point = new Point(x, y, r, outZone, unique);
                     }
                 } else {
-                    if (Math.pow(X, 2) + Math.pow(Y, 2) <= Math.pow(R, 2)) {
+                    if (X < R  && Y < R) {
+                        point = new Point(x, y, r, inZone, unique);
+                    } else {
+                        point = new Point(x, y, r, outZone, unique);
+                    }
+                }
+            } else {
+                if (Y > 0) {
+                    point = new Point(x, y, r, outZone, unique);
+                } else {
+                    if (R > 2*X - Y) {
                         point = new Point(x, y, r, inZone, unique);
                     } else {
                         point = new Point(x, y, r, outZone, unique);
@@ -53,10 +62,8 @@ public class AreaCheckServlet extends HttpServlet {
             point = new Point(x, y, r, wrongFormat, unique);
         }
 
+        Deque<Point> data = ((DataBean) req.getSession().getAttribute("DataBean")).getData();
 
-        Deque<Point> data = (Deque<Point>) req.getSession().getAttribute("data");
-//        Deque<Point> data = (Deque<Point>) getServletContext().getAttribute("data");
-//        Deque<Point> data = (Deque<Point>) req.getSession().getAttribute("data").getData();
         try {
             Point last = data.getFirst();
             if (!last.equals(point)) //add if not reload page

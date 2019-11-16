@@ -1,13 +1,15 @@
 "use strict"
 let er = document.getElementById("error");
 let textField = document.getElementById("textfieldY");
-let Xfield = document.getElementById("X");
+let Xfield = document.getElementsByName("X");
 let Rfield = document.getElementsByName("R");
 
 function valid() {
     let validX = false;
     let validR = false;
-    if (Xfield.value) validX = true;
+    Array.prototype.forEach.call(Xfield, function (button) {
+        if (button.checked) validX = true;
+    });
     Array.prototype.forEach.call(Rfield, function (button) {
         if (button.checked) validR = true;
     });
