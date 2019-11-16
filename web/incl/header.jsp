@@ -58,7 +58,7 @@
                             ctx.fillStyle = blue;
                         }
                     } else {
-                        if (x < r  && y < r) {
+                        if (x > -r  && y > -r) {
                             ctx.fillStyle = red;
                         } else {
                             ctx.fillStyle = blue;

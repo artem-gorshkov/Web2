@@ -72,7 +72,7 @@
                     <tr>
                         <td>
                             <p>
-                                <input type="submit" value="Отправить">
+                                <input type="submit" value="Отправить" onclick="document.getElementById('CanvasX').remove();">
                             </p>
                             <div id="error"></div>
                         </td>
@@ -128,7 +128,7 @@
             ctx.fill();
 
             //send request
-            form.elements.X.value = cordY;
+            document.getElementById("CanvasX").value = cordX;
             form.elements.Y.value = cordY;
             form.elements.isFromCanvas.value = 1;
             form.submit();

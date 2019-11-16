@@ -15,7 +15,7 @@
                 <tr>
                     <td><c:out value="${point.getX()}"/>
                     </td>
-                    <td><c:out value="${point.getY()}"/>
+                    <td class="word-break"><c:out value="${point.getY()}"/>
                     </td>
                     <td><c:out value="${point.getR()}"/>
                     </td>
